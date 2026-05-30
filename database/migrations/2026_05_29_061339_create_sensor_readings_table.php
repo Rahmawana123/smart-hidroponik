@@ -17,7 +17,7 @@ return new class extends Migration
             $table->float('suhu_udara');
             $table->float('kelembapan');
             $table->integer('tds');
-            $table->integer('intensiteas_cahaya');
+            $table->integer('intensitas_cahaya');
             $table->timestamps();
         });
     }

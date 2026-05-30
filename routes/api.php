@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\SensorController;
 use App\Http\Controllers\Api\ControlController;
 
-// Endpoint untuk alat mengirim data sensor & fuzzy ke web
+// endpoint untuk alat mengirim data sensor dan fuzzy ke web nya
 Route::post('/sensor/kirim', [SensorController::class, 'store']);
 
-// Endpoint untuk web/alat mengubah status mode dan aktuator
+// endpoint untuk web/alat mengubah status mode dan aktuator
 Route::post('/kontrol/update', [ControlController::class, 'updateStatus']);

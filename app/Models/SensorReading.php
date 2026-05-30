@@ -9,7 +9,7 @@ class SensorReading extends Model
 {
     use HasFactory;
 
-    // Daftar kolom yang boleh diisi (sesuaikan dengan migration)
+    // daftar kolom yang boleh diisi 
     protected $fillable = [
         'ph_air',
         'suhu_udara',
@@ -18,7 +18,7 @@ class SensorReading extends Model
         'intensitas_cahaya'
     ];
 
-    // Relasi: Satu data sensor punya satu data fuzzy
+    // relasinya Satu data sensor punya satu data fuzzy
     public function fuzzyLog()
     {
         return $this->hasOne(FuzzyLog::class);

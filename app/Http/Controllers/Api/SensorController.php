@@ -12,7 +12,7 @@ class SensorController extends Controller
 {
     public function store(Request $request)
     {
-        // 1. Validasi JSON Bercabang menggunakan tanda titik (.)
+        // Validasi JSON Bercabang menggunakan tanda titik
         $request->validate([
             'data_sensor.ph_air' => 'required|numeric',
             'data_sensor.suhu_udara' => 'required|numeric',
@@ -28,7 +28,7 @@ class SensorController extends Controller
 
         DB::beginTransaction();
         try {
-            // 2. Simpan ke tabel sensor_readings (Panggil pakai tanda titik juga)
+            // simpan ke tabel sensor_readings  
             $sensor = SensorReading::create([
                 'ph_air' => $request->input('data_sensor.ph_air'),
                 'suhu_udara' => $request->input('data_sensor.suhu_udara'),
@@ -37,7 +37,7 @@ class SensorController extends Controller
                 'intensitas_cahaya' => $request->input('data_sensor.intensitas_cahaya'),
             ]);
 
-            // 3. Simpan ke tabel fuzzy_logs
+            // simpan ke tabel fuzzy_logs
             FuzzyLog::create([
                 'sensor_reading_id' => $sensor->id,
                 'himpunan_ph' => $request->input('data_fuzzy.himpunan_ph'),
