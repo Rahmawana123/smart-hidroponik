@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
-Route::get('/', function () {
-    return view('dashboard');
-});
+// memanggil fungsi index di DashboardController pakai alamat utama (/)
+Route::get('/', [DashboardController::class, 'index']);
