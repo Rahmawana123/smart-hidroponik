@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Services\TelegramService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SensorReading;
@@ -22,8 +23,10 @@ class SensorController extends Controller
 
             'data_fuzzy.himpunan_ph' => 'required|string',
             'data_fuzzy.himpunan_suhu' => 'required|string',
+            'data_fuzzy.himpunan_cahaya' => 'required|string',
             'data_fuzzy.nilai_defuzz_pompa_ph' => 'required|numeric',
             'data_fuzzy.nilai_defuzz_kipas' => 'required|numeric',
+            'data_fuzzy.nilai_defuzz_growlight' => 'required|numeric',
         ]);
 
         DB::beginTransaction();
@@ -42,11 +45,44 @@ class SensorController extends Controller
                 'sensor_reading_id' => $sensor->id,
                 'himpunan_ph' => $request->input('data_fuzzy.himpunan_ph'),
                 'himpunan_suhu' => $request->input('data_fuzzy.himpunan_suhu'),
+                'himpunan_cahaya' => $request->input('data_fuzzy.himpunan_cahaya'),
                 'nilai_defuzz_pompa_ph' => $request->input('data_fuzzy.nilai_defuzz_pompa_ph'),
                 'nilai_defuzz_kipas' => $request->input('data_fuzzy.nilai_defuzz_kipas'),
+                'nilai_defuzz_growlight' => $request->input('data_fuzzy.nilai_defuzz_growlight'),
             ]);
 
             DB::commit();
+            $suhu = $request->input('data_sensor.suhu_udara');
+            $kelembapan = $request->input('data_sensor.kelembapan');
+            $phAir = $request->input('data_sensor.ph_air');
+            $tds = $request->input('data_sensor.tds');
+            $cahaya = $request->input('data_sensor.intensitas_cahaya');
+
+            $statusSuhu = $request->input('data_fuzzy.himpunan_suhu');
+            $statusPh = $request->input('data_fuzzy.himpunan_ph');
+            $statusCahaya = $request->input('data_fuzzy.himpunan_cahaya');
+
+            if ($statusSuhu !== 'NORMAL' || $statusPh !== 'NORMAL') {
+                $pesanTelegram  = "🚨 *PERINGATAN DINI HIDROPONIK* 🚨\n\n";
+
+                $pesanTelegram .= "Sistem mendeteksi parameter lingkungan berada di luar kondisi normal.\n\n";
+
+                $pesanTelegram .= "📊 *Data Monitoring Saat Ini*\n";
+                $pesanTelegram .= "🌡️ Suhu Udara : {$suhu} °C\n";
+                $pesanTelegram .= "☁️ Kelembapan : {$kelembapan} %\n";
+                $pesanTelegram .= "💧 pH Air : {$phAir}\n";
+                $pesanTelegram .= "🧪 TDS Nutrisi : {$tds} ppm\n\n";
+                $pesanTelegram .= "💡 Intensitas Cahaya : {$cahaya} lux\n\n";
+
+                $pesanTelegram .= "📌 *Status Hasil Fuzzy*\n";
+                $pesanTelegram .= "• Suhu : {$statusSuhu}\n";
+                $pesanTelegram .= "• pH Air : {$statusPh}\n\n";
+                $pesanTelegram .= "• Cahaya : {$statusCahaya}\n\n";
+                $pesanTelegram .= "🕒 Waktu : " . now()->format('d-m-Y H:i:s') . " WIB\n\n";
+                $pesanTelegram .= "⚠️ Mohon segera melakukan pengecekan pada sistem hidroponik melalui dashboard monitoring.";
+
+                TelegramService::sendMessage($pesanTelegram);
+            }
 
             return response()->json([
                 'status' => 'success',

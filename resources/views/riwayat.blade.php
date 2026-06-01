@@ -47,6 +47,7 @@
                         <th>Status pH</th>
                         <th>TDS (Nutrisi)</th>
                         <th>Cahaya</th>
+                        <th>Status Cahaya</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,6 +71,11 @@
                         </td>
                         <td>{{ $data->tds }} ppm</td>
                         <td>{{ $data->intensitas_cahaya }} lux</td>
+                        <td>
+                            <span class="badge bg-{{ ($data->fuzzyLog->himpunan_cahaya ?? '') === 'NORMAL' ? 'success' : (($data->fuzzyLog->himpunan_cahaya ?? '') === 'REDUP' ? 'secondary' : 'warning text-dark') }}">
+                                {{ $data->fuzzyLog->himpunan_cahaya ?? '-' }}
+                            </span>
+                        </td>
                     </tr>
                     @empty
                     <tr>

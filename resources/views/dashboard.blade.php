@@ -53,7 +53,7 @@
             <div class="card-body">
                 <h6 class="card-title text-uppercase">Intensitas Cahaya</h6>
                 <h2 class="display-5 fw-bold">{{ $sensor->intensitas_cahaya ?? '0' }}<span class="fs-4"> lux</span></h2>
-                <small class="text-white-50">Hanya Dimonitor (Tidak Dikendalikan)</small>
+                <small>Status Cahaya: {{ $sensor->fuzzyLog->himpunan_cahaya ?? 'Tidak Ada Data' }}</small>
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@
 </div>
 
 <div class="row mb-5">
-    <div class="col-md-4 mb-3">
+    <div class="col-md-3 mb-3">
         <div class="card border-0 shadow-sm h-100 border-start border-warning border-4">
             <div class="card-body text-center">
                 <h5 class="card-title mb-4">Kipas Mikroklimat</h5>
@@ -83,7 +83,7 @@
         </div>
     </div>
 
-    <div class="col-md-4 mb-3">
+    <div class="col-md-3 mb-3">
         <div class="card border-0 shadow-sm h-100 border-start border-warning border-4">
             <div class="card-body text-center">
                 <h5 class="card-title mb-4">Pompa pH Up</h5>
@@ -95,13 +95,25 @@
         </div>
     </div>
 
-    <div class="col-md-4 mb-3">
+    <div class="col-md-3 mb-3">
         <div class="card border-0 shadow-sm h-100 border-start border-warning border-4">
             <div class="card-body text-center">
                 <h5 class="card-title mb-4">Pompa pH Down</h5>
                 <div class="d-grid gap-2">
                     <button id="btn-pompa_ph_down-ON" class="btn {{ ($device->pompa_ph_down ?? 'OFF') === 'ON' ? 'btn-success' : 'btn-outline-success' }} fw-bold" onclick="kirimPerintah('pompa_ph_down', 'ON')">NYALAKAN (ON)</button>
                     <button id="btn-pompa_ph_down-OFF" class="btn {{ ($device->pompa_ph_down ?? 'OFF') === 'OFF' ? 'btn-danger' : 'btn-outline-danger' }} fw-bold" onclick="kirimPerintah('pompa_ph_down', 'OFF')">MATIKAN (OFF)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100 border-start border-warning border-4">
+            <div class="card-body text-center">
+                <h5 class="card-title mb-4">Lampu Growlight</h5>
+                <div class="d-grid gap-2">
+                    <button id="btn-growlight-ON" class="btn {{ ($device->growlight ?? 'OFF') === 'ON' ? 'btn-success' : 'btn-outline-success' }} fw-bold" onclick="kirimPerintah('growlight', 'ON')">NYALAKAN (ON)</button>
+                    <button id="btn-growlight-OFF" class="btn {{ ($device->growlight ?? 'OFF') === 'OFF' ? 'btn-danger' : 'btn-outline-danger' }} fw-bold" onclick="kirimPerintah('growlight', 'OFF')">MATIKAN (OFF)</button>
                 </div>
             </div>
         </div>

@@ -13,8 +13,10 @@ class FuzzyLog extends Model
         'sensor_reading_id',
         'himpunan_ph',
         'himpunan_suhu',
+        'himpunan_cahaya',
         'nilai_defuzz_pompa_ph',
-        'nilai_defuzz_kipas'
+        'nilai_defuzz_kipas',
+        'nilai_defuzz_growlight'
     ];
 
     // relasi balik nya data fuzzy ini milik satu data sensor

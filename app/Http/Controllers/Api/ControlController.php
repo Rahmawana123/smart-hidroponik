@@ -13,10 +13,10 @@ class ControlController extends Controller
 {
     public function updateStatus(Request $request)
     {
-        // memvalidasi perintah yang masuk supaya nama aktuator hanya boleh 3 alat ini aja
+        // memvalidasi perintah yang masuk supaya nama aktuator hanya boleh 4 alat ini aja
         $request->validate([
             'device_id' => 'required|string',
-            'nama_aktuator' => 'required|in:pompa_ph_up,pompa_ph_down,kipas_mikroklimat',
+            'nama_aktuator' => 'required|in:pompa_ph_up,pompa_ph_down,kipas_mikroklimat,growlight',
             'status_aksi' => 'required|in:ON,OFF',
             'mode_sistem' => 'required|in:AUTO,MANUAL',
             'trigger_source' => 'required|string' // WEB atau SISTEM FUZZY nya
@@ -31,7 +31,8 @@ class ControlController extends Controller
                     'mode_sistem' => 'AUTO',
                     'pompa_ph_up' => 'OFF',
                     'pompa_ph_down' => 'OFF',
-                    'kipas_mikroklimat' => 'OFF'
+                    'kipas_mikroklimat' => 'OFF',
+                    'growlight' => 'OFF'
                 ]
             );
 

@@ -15,6 +15,7 @@ class DeviceStatus extends Model
         'pompa_ph_up',
         'pompa_ph_down',
         'kipas_mikroklimat',
+        'growlight',
         'override_until'
     ];
 
