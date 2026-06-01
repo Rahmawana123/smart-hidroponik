@@ -1,25 +1,17 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Hidroponik - @yield('title')</title>
-
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    
     <style>
-        body {
-            background-color: #f4f6f9;
-        }
-
-        .navbar-brand {
-            font-weight: bold;
-            color: #28a745 !important;
-        }
+        body { background-color: #f4f6f9; }
+        .navbar-brand { font-weight: bold; color: #28a745 !important; }
     </style>
 </head>
-
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
@@ -31,10 +23,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Dashboard</a>
+                        <a class="nav-link {{ request()->is('/') ? 'active fw-bold' : '' }}" href="/">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Riwayat Data</a>
+                        <a class="nav-link {{ request()->is('riwayat') ? 'active fw-bold' : '' }}" href="/riwayat">Riwayat Data</a>
                     </li>
                 </ul>
             </div>
@@ -47,5 +39,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
