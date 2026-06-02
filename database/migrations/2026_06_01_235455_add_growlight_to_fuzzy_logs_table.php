@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('fuzzy_logs', function (Blueprint $table) {
             $table->string('himpunan_cahaya')->default('NORMAL')->after('himpunan_suhu');
-            $table->decimal('nilai_defuzz_growlight', 8, 2)->default(0)->after('nilai_defuzz_kipas');
+            $table->decimal('nilai_defuzz_growlight', 8, 2)->default(0)->after('nilai_defuzz_misting');
         });
     }
 

@@ -47,7 +47,7 @@ class SensorController extends Controller
                 'himpunan_suhu' => $request->input('data_fuzzy.himpunan_suhu'),
                 'himpunan_cahaya' => $request->input('data_fuzzy.himpunan_cahaya'),
                 'nilai_defuzz_pompa_ph' => $request->input('data_fuzzy.nilai_defuzz_pompa_ph'),
-                'nilai_defuzz_kipas' => $request->input('data_fuzzy.nilai_defuzz_kipas'),
+                'nilai_defuzz_misting' => $request->input('data_fuzzy.nilai_defuzz_misting'),
                 'nilai_defuzz_growlight' => $request->input('data_fuzzy.nilai_defuzz_growlight'),
             ]);
 
@@ -78,6 +78,7 @@ class SensorController extends Controller
                 $pesanTelegram .= "• Suhu : {$statusSuhu}\n";
                 $pesanTelegram .= "• pH Air : {$statusPh}\n\n";
                 $pesanTelegram .= "• Cahaya : {$statusCahaya}\n\n";
+
                 $pesanTelegram .= "🕒 Waktu : " . now()->format('d-m-Y H:i:s') . " WIB\n\n";
                 $pesanTelegram .= "⚠️ Mohon segera melakukan pengecekan pada sistem hidroponik melalui dashboard monitoring.";
 

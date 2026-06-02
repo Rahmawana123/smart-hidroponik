@@ -10,3 +10,6 @@ Route::post('/sensor/kirim', [SensorController::class, 'store']);
 
 // endpoint untuk web/alat mengubah status mode dan aktuator
 Route::post('/kontrol/update', [ControlController::class, 'updateStatus']);
+
+// API untuk ESP32 mengambil nilai target (Set Point) tanaman
+Route::get('/config/{device_id}', [\App\Http\Controllers\Api\ControlController::class, 'getSetPoint']);

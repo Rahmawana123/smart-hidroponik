@@ -3,6 +3,50 @@
 @section('title', 'Dashboard Monitoring')
 
 @section('content')
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm border-start border-success border-4 bg-light">
+            <div class="card-body">
+                <h5 class="card-title text-success mb-3">
+                    <i class="bi bi-flower1"></i> Konfigurasi Set Point Tanaman
+                </h5>
+
+                <div class="d-flex align-items-center flex-wrap gap-3">
+                    <div class="me-auto">
+                        <span class="text-muted d-block">Tanaman Aktif Saat Ini:</span>
+                        <h4 class="fw-bold mb-0 text-uppercase">
+                            {{ $device->cropConfig->nama_tanaman ?? 'BELUM DIPILIH' }}
+                        </h4>
+                    </div>
+
+                    <form action="{{ route('ubah.tanaman') }}" method="POST" class="d-flex align-items-center gap-2">
+                        @csrf
+                        <select name="crop_config_id" class="form-select fw-bold border-success">
+                            @foreach(\App\Models\CropConfig::all() as $crop)
+                            <option value="{{ $crop->id }}" {{ ($device->crop_config_id == $crop->id) ? 'selected' : '' }}>
+                                {{ $crop->nama_tanaman }}
+                            </option>
+                            @endforeach
+                        </select>
+                        <button type="submit" class="btn btn-success fw-bold text-nowrap">
+                            Terapkan Set Point
+                        </button>
+                    </form>
+                </div>
+
+                <hr>
+                <div class="row text-center text-muted small">
+                    <div class="col-3">Suhu: <strong>{{ $device->cropConfig->batas_bawah_suhu ?? '-' }} - {{ $device->cropConfig->batas_atas_suhu ?? '-' }}°C</strong></div>
+                    <div class="col-3">pH: <strong>{{ $device->cropConfig->batas_bawah_ph ?? '-' }} - {{ $device->cropConfig->batas_atas_ph ?? '-' }}</strong></div>
+                    <div class="col-3">RH: <strong>{{ $device->cropConfig->batas_bawah_kelembapan ?? '-' }} - {{ $device->cropConfig->batas_atas_kelembapan ?? '-' }}%</strong></div>
+                    <div class="col-3">TDS: <strong>{{ $device->cropConfig->batas_bawah_tds ?? '-' }} - {{ $device->cropConfig->batas_atas_tds ?? '-' }} ppm</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <h4 class="mb-3 text-secondary">📊 Pemantauan Lingkungan Aktual</h4>
 
 <div class="row mb-3">
@@ -10,8 +54,8 @@
         <div class="card border-0 shadow-sm bg-primary text-white h-100">
             <div class="card-body">
                 <h6 class="card-title text-uppercase">Suhu Udara</h6>
-                <h2 class="display-5 fw-bold">{{ $sensor->suhu_udara ?? '0' }}<span class="fs-4">°C</span></h2>
-                <small>Status Fuzzy: {{ $sensor->fuzzyLog->himpunan_suhu ?? 'Tidak Ada Data' }}</small>
+                <h2 class="display-5 fw-bold">{{ $sensor?->suhu_udara ?? '0' }}<span class="fs-4">°C</span></h2>
+                <small>Status Fuzzy: {{ $sensor?->fuzzyLog?->himpunan_suhu ?? 'Tidak Ada Data' }}</small>
             </div>
         </div>
     </div>
@@ -20,7 +64,7 @@
         <div class="card border-0 shadow-sm bg-info text-white h-100">
             <div class="card-body">
                 <h6 class="card-title text-uppercase">Kelembapan Udara</h6>
-                <h2 class="display-5 fw-bold">{{ $sensor->kelembapan ?? '0' }}<span class="fs-4">%</span></h2>
+                <h2 class="display-5 fw-bold">{{ $sensor?->kelembapan ?? '0' }}<span class="fs-4">%</span></h2>
                 <small class="text-white-50">Dimonitor & Dikendalikan</small>
             </div>
         </div>
@@ -30,8 +74,8 @@
         <div class="card border-0 shadow-sm bg-success text-white h-100">
             <div class="card-body">
                 <h6 class="card-title text-uppercase">Tingkat pH Air</h6>
-                <h2 class="display-5 fw-bold">{{ $sensor->ph_air ?? '0' }}</h2>
-                <small>Status Fuzzy: {{ $sensor->fuzzyLog->himpunan_ph ?? 'Tidak Ada Data' }}</small>
+                <h2 class="display-5 fw-bold">{{ $sensor?->ph_air ?? '0' }}</h2>
+                <small>Status Fuzzy: {{ $sensor?->fuzzyLog?->himpunan_ph ?? 'Tidak Ada Data' }}</small>
             </div>
         </div>
     </div>
@@ -42,7 +86,7 @@
         <div class="card border-0 shadow-sm bg-warning text-dark h-100">
             <div class="card-body">
                 <h6 class="card-title text-uppercase">Konsentrasi Nutrisi (TDS)</h6>
-                <h2 class="display-5 fw-bold">{{ $sensor->tds ?? '0' }}<span class="fs-4"> ppm</span></h2>
+                <h2 class="display-5 fw-bold">{{ $sensor?->tds ?? '0' }}<span class="fs-4"> ppm</span></h2>
                 <small class="text-muted">Hanya Dimonitor (Tidak Dikendalikan)</small>
             </div>
         </div>
@@ -52,8 +96,8 @@
         <div class="card border-0 shadow-sm bg-secondary text-white h-100">
             <div class="card-body">
                 <h6 class="card-title text-uppercase">Intensitas Cahaya</h6>
-                <h2 class="display-5 fw-bold">{{ $sensor->intensitas_cahaya ?? '0' }}<span class="fs-4"> lux</span></h2>
-                <small>Status Cahaya: {{ $sensor->fuzzyLog->himpunan_cahaya ?? 'Tidak Ada Data' }}</small>
+                <h2 class="display-5 fw-bold">{{ $sensor?->intensitas_cahaya ?? '0' }}<span class="fs-4"> lux</span></h2>
+                <small>Status Cahaya: {{ $sensor?->fuzzyLog?->himpunan_cahaya ?? 'Tidak Ada Data' }}</small>
             </div>
         </div>
     </div>
@@ -74,10 +118,10 @@
     <div class="col-md-3 mb-3">
         <div class="card border-0 shadow-sm h-100 border-start border-warning border-4">
             <div class="card-body text-center">
-                <h5 class="card-title mb-4">Kipas Mikroklimat</h5>
+                <h5 class="card-title mb-4">Misting</h5>
                 <div class="d-grid gap-2">
-                    <button id="btn-kipas_mikroklimat-ON" class="btn {{ ($device->kipas_mikroklimat ?? 'OFF') === 'ON' ? 'btn-success' : 'btn-outline-success' }} fw-bold" onclick="kirimPerintah('kipas_mikroklimat', 'ON')">NYALAKAN (ON)</button>
-                    <button id="btn-kipas_mikroklimat-OFF" class="btn {{ ($device->kipas_mikroklimat ?? 'OFF') === 'OFF' ? 'btn-danger' : 'btn-outline-danger' }} fw-bold" onclick="kirimPerintah('kipas_mikroklimat', 'OFF')">MATIKAN (OFF)</button>
+                    <button id="btn-misting-ON" class="btn {{ ($device->misting ?? 'OFF') === 'ON' ? 'btn-success' : 'btn-outline-success' }} fw-bold" onclick="kirimPerintah('misting', 'ON')">NYALAKAN (ON)</button>
+                    <button id="btn-misting-OFF" class="btn {{ ($device->misting ?? 'OFF') === 'OFF' ? 'btn-danger' : 'btn-outline-danger' }} fw-bold" onclick="kirimPerintah('misting', 'OFF')">MATIKAN (OFF)</button>
                 </div>
             </div>
         </div>

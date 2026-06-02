@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('himpunan_ph');
             $table->string('himpunan_suhu');
             $table->float('nilai_defuzz_pompa_ph');
-            $table->float('nilai_defuzz_kipas');
+            $table->float('nilai_defuzz_misting');
             $table->timestamps();
         });
     }

@@ -16,7 +16,7 @@ class ControlController extends Controller
         // memvalidasi perintah yang masuk supaya nama aktuator hanya boleh 4 alat ini aja
         $request->validate([
             'device_id' => 'required|string',
-            'nama_aktuator' => 'required|in:pompa_ph_up,pompa_ph_down,kipas_mikroklimat,growlight',
+            'nama_aktuator' => 'required|in:pompa_ph_up,pompa_ph_down,misting,growlight',
             'status_aksi' => 'required|in:ON,OFF',
             'mode_sistem' => 'required|in:AUTO,MANUAL',
             'trigger_source' => 'required|string' // WEB atau SISTEM FUZZY nya
@@ -31,7 +31,7 @@ class ControlController extends Controller
                     'mode_sistem' => 'AUTO',
                     'pompa_ph_up' => 'OFF',
                     'pompa_ph_down' => 'OFF',
-                    'kipas_mikroklimat' => 'OFF',
+                    'misting' => 'OFF',
                     'growlight' => 'OFF'
                 ]
             );
@@ -74,5 +74,58 @@ class ControlController extends Controller
                 'message' => 'Gagal mengeksekusi perintah kendali: ' . $e->getMessage()
             ], 500);
         }
+    }
+    public function getSetPoint($device_id)
+    {
+        // Cari alat beserta konfigurasi tanaman yang aktif
+        $device = \App\Models\DeviceStatus::with('cropConfig')
+            ->where('device_id', $device_id)
+            ->first();
+
+        // Jika alat tidak ditemukan
+        if (!$device) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Alat tidak ditemukan'
+            ], 404);
+        }
+
+        // Ambil konfigurasi tanaman yang sedang dipilih
+        $config = $device->cropConfig;
+
+        // Jika belum ada tanaman yang dipilih
+        if (!$config) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Belum ada tanaman yang dipilih pada dashboard'
+            ], 404);
+        }
+
+        // Kirim seluruh set point ke ESP32
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Set point aktif berhasil diambil',
+            'device_id' => $device->device_id,
+            'mode_sistem' => $device->mode_sistem,
+            'data' => [
+                'nama_tanaman' => $config->nama_tanaman,
+
+                'batas_bawah_ph' => $config->batas_bawah_ph,
+                'batas_atas_ph' => $config->batas_atas_ph,
+
+                'batas_bawah_suhu' => $config->batas_bawah_suhu,
+                'batas_atas_suhu' => $config->batas_atas_suhu,
+
+                'batas_bawah_kelembapan' => $config->batas_bawah_kelembapan,
+                'batas_atas_kelembapan' => $config->batas_atas_kelembapan,
+
+                'batas_bawah_cahaya' => $config->batas_bawah_cahaya,
+                'batas_atas_cahaya' => $config->batas_atas_cahaya,
+
+                // TDS (untuk monitoring dan notifikasi)
+                'batas_bawah_tds' => $config->batas_bawah_tds,
+                'batas_atas_tds' => $config->batas_atas_tds,
+            ]
+        ], 200);
     }
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('mode_sistem')->default('AUTO');
             $table->string('pompa_ph_up')->default('OFF');
             $table->string('pompa_ph_down')->default('OFF');
-            $table->string('kipas_mikroklimat')->default('OFF');
+            $table->string('misting')->default('OFF');
             $table->string('pompa_nutrisi')->default('OFF');
             $table->timestamp('override_until')->nullable(); //ini untuk batas waktu kembali ke mode auto(manual)
             $table->timestamps();

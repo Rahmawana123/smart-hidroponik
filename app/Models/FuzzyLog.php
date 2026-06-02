@@ -15,7 +15,7 @@ class FuzzyLog extends Model
         'himpunan_suhu',
         'himpunan_cahaya',
         'nilai_defuzz_pompa_ph',
-        'nilai_defuzz_kipas',
+        'nilai_defuzz_misting',
         'nilai_defuzz_growlight'
     ];
 

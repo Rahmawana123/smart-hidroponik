@@ -15,7 +15,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Memanggil seeder resep tanaman
+        $this->call([
+            CropConfigSeeder::class,
+        ]);
 
         User::factory()->create([
             'name' => 'Test User',
