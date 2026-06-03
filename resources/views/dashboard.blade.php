@@ -47,8 +47,12 @@
     </div>
 </div>
 
-<h4 class="mb-3 text-secondary">📊 Pemantauan Lingkungan Aktual</h4>
-
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="text-secondary mb-0">📊 Pemantauan Lingkungan Aktual</h4>
+    <a href="{{ route('export.excel') }}" class="btn btn-success fw-bold shadow-sm">
+        <i class="bi bi-file-earmark-excel"></i> Export ke Excel
+    </a>
+</div>
 <div class="row mb-3">
     <div class="col-md-4 col-sm-12 mb-3">
         <div class="card border-0 shadow-sm bg-primary text-white h-100">
@@ -65,7 +69,7 @@
             <div class="card-body">
                 <h6 class="card-title text-uppercase">Kelembapan Udara</h6>
                 <h2 class="display-5 fw-bold">{{ $sensor?->kelembapan ?? '0' }}<span class="fs-4">%</span></h2>
-                <small class="text-white-50">Dimonitor & Dikendalikan</small>
+                <small>Status Fuzzy: {{ $sensor?->fuzzyLog?->himpunan_kelembapan ?? 'Tidak Ada Data' }}</small>
             </div>
         </div>
     </div>

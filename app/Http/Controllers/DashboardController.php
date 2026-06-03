@@ -10,9 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $sensor = SensorReading::with('fuzzyLog')
-            ->latest()
-            ->first();
+        $sensor = SensorReading::with('fuzzyLog')->latest()->first();
 
         $device = DeviceStatus::where(
             'device_id',

@@ -43,6 +43,7 @@
                         <th>Suhu Udara</th>
                         <th>Status Suhu</th>
                         <th>Kelembapan</th>
+                        <th>Status Kelembapan</th>
                         <th>pH Air</th>
                         <th>Status pH</th>
                         <th>TDS (Nutrisi)</th>
@@ -63,6 +64,12 @@
                             </span>
                         </td>
                         <td>{{ $data->kelembapan }} %</td>
+
+                        <td>
+                            <span class="badge bg-{{ ($data->fuzzyLog->himpunan_kelembapan ?? '') === 'KERING' ? 'warning text-dark' : (($data->fuzzyLog->himpunan_kelembapan ?? '') === 'LEMBAP' ? 'info text-dark' : 'success') }}">
+                                {{ $data->fuzzyLog->himpunan_kelembapan ?? '-' }}
+                            </span>
+                        </td>
                         <td class="fw-bold text-success">{{ $data->ph_air }}</td>
                         <td>
                             <span class="badge bg-{{ ($data->fuzzyLog->himpunan_ph ?? '') === 'NORMAL' ? 'success' : 'warning text-dark' }}">
@@ -79,86 +86,84 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="text-center p-4 text-muted">Belum ada rekam jejak data sensor di database.</td>
+                        <td colspan="10" class="text-center p-4 text-muted">Belum ada rekam jejak data sensor di database.</td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-    </div>
-</div>
 
-<div class="d-flex justify-content-end">
-    {{ $historyData->links() }}
-</div>
+        <div class="d-flex justify-content-end">
+            {{ $historyData->links() }}
+        </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const labelWaktu = @json($labelWaktu);
-    const dataSuhu = @json($dataSuhu);
-    const dataKelembapan = @json($dataKelembapan);
-    const dataPH = @json($dataPH);
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const labelWaktu = @json($labelWaktu);
+            const dataSuhu = @json($dataSuhu);
+            const dataKelembapan = @json($dataKelembapan);
+            const dataPH = @json($dataPH);
 
-    // 2. Render Grafik Mikroklimat (Suhu & Kelembapan)
-    const ctxMikro = document.getElementById('chartMikroklimat').getContext('2d');
-    new Chart(ctxMikro, {
-        type: 'line',
-        data: {
-            labels: labelWaktu,
-            datasets: [{
-                    label: 'Suhu Udara (°C)',
-                    data: dataSuhu,
-                    borderColor: '#0d6efd',
-                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
-                    tension: 0.3,
-                    fill: true
+            // 2. Render Grafik Mikroklimat (Suhu & Kelembapan)
+            const ctxMikro = document.getElementById('chartMikroklimat').getContext('2d');
+            new Chart(ctxMikro, {
+                type: 'line',
+                data: {
+                    labels: labelWaktu,
+                    datasets: [{
+                            label: 'Suhu Udara (°C)',
+                            data: dataSuhu,
+                            borderColor: '#0d6efd',
+                            backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Kelembapan (%)',
+                            data: dataKelembapan,
+                            borderColor: '#0dcaf0',
+                            backgroundColor: 'rgba(13, 202, 240, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
                 },
-                {
-                    label: 'Kelembapan (%)',
-                    data: dataKelembapan,
-                    borderColor: '#0dcaf0',
-                    backgroundColor: 'rgba(13, 202, 240, 0.1)',
-                    tension: 0.3,
-                    fill: true
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
                 }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: false
-                }
-            }
-        }
-    });
+            });
 
-    // 3. Render Grafik Kualitas Air (pH)
-    const ctxAir = document.getElementById('chartAir').getContext('2d');
-    new Chart(ctxAir, {
-        type: 'line',
-        data: {
-            labels: labelWaktu,
-            datasets: [{
-                label: 'Tingkat pH Air',
-                data: dataPH,
-                borderColor: '#198754',
-                backgroundColor: 'rgba(25, 135, 84, 0.1)',
-                tension: 0.3,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    min: 0,
-                    max: 14
-                } // pH berkisar antara skala logaritma 0 s.d 14
-            }
-        }
-    });
-</script>
-@endsection
+            // 3. Render Grafik Kualitas Air (pH)
+            const ctxAir = document.getElementById('chartAir').getContext('2d');
+            new Chart(ctxAir, {
+                type: 'line',
+                data: {
+                    labels: labelWaktu,
+                    datasets: [{
+                        label: 'Tingkat pH Air',
+                        data: dataPH,
+                        borderColor: '#198754',
+                        backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 14
+                        } // pH berkisar antara skala logaritma 0 s.d 14
+                    }
+                }
+            });
+        </script>
+        @endsection

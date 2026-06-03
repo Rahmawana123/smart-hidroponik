@@ -25,7 +25,7 @@ class SensorController extends Controller
             'data_fuzzy.himpunan_suhu' => 'required|string',
             'data_fuzzy.himpunan_cahaya' => 'required|string',
             'data_fuzzy.nilai_defuzz_pompa_ph' => 'required|numeric',
-            'data_fuzzy.nilai_defuzz_kipas' => 'required|numeric',
+            'data_fuzzy.nilai_defuzz_misting' => 'required|numeric',
             'data_fuzzy.nilai_defuzz_growlight' => 'required|numeric',
         ]);
 
@@ -45,6 +45,7 @@ class SensorController extends Controller
                 'sensor_reading_id' => $sensor->id,
                 'himpunan_ph' => $request->input('data_fuzzy.himpunan_ph'),
                 'himpunan_suhu' => $request->input('data_fuzzy.himpunan_suhu'),
+                'himpunan_kelembapan' => $request->input('data_fuzzy.himpunan_kelembapan'),
                 'himpunan_cahaya' => $request->input('data_fuzzy.himpunan_cahaya'),
                 'nilai_defuzz_pompa_ph' => $request->input('data_fuzzy.nilai_defuzz_pompa_ph'),
                 'nilai_defuzz_misting' => $request->input('data_fuzzy.nilai_defuzz_misting'),

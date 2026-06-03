@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\ExportController;
 
 // memanggil fungsi index di DashboardController pakai alamat utama (/)
 Route::get('/', [DashboardController::class, 'index']);
@@ -23,3 +24,6 @@ Route::post('/ubah-tanaman', function (\Illuminate\Http\Request $request) {
     // Kembalikan ke halaman dasbor
     return back()->with('success', 'Resep Set Point Tanaman berhasil diubah!');
 })->name('ubah.tanaman');
+
+// Rute untuk mengunduh data log sensor ke Excel
+Route::get('/export-excel', [ExportController::class, 'exportExcel'])->name('export.excel');

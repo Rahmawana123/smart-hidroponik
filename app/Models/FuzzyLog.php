@@ -13,6 +13,7 @@ class FuzzyLog extends Model
         'sensor_reading_id',
         'himpunan_ph',
         'himpunan_suhu',
+        'himpunan_kelembapan',
         'himpunan_cahaya',
         'nilai_defuzz_pompa_ph',
         'nilai_defuzz_misting',
