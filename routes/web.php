@@ -27,3 +27,5 @@ Route::post('/ubah-tanaman', function (\Illuminate\Http\Request $request) {
 
 // Rute untuk mengunduh data log sensor ke Excel
 Route::get('/export-excel', [ExportController::class, 'exportExcel'])->name('export.excel');
+
+Route::get('/export-pdf', [ExportController::class, 'exportPdf'])->name('export.pdf');

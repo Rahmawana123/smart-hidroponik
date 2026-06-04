@@ -4,6 +4,61 @@
 
 @section('content')
 
+<div class="card border-0 shadow-sm mb-4 overflow-hidden" style="border-radius: 15px;">
+    <div class="card-body p-4 text-white" style="
+       background: linear-gradient(rgba(20, 50, 25, 0.8), rgba(20, 50, 25, 0.8)), 
+        url('{{ asset('images/bg6.jpeg') }}') no-repeat center center; 
+        background-size: cover;">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h4 class="fw-bold mb-1"><i class="bi bi-display"></i> Telemetri Sistem Aktual</h4>
+                <p class="mb-0 text-white-50 small">Pemantauan real-time perangkat ESP32</p>
+            </div>
+
+            <div class="d-flex gap-4 flex-wrap">
+                <div class="text-end">
+                    <small class="text-white-50 d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Status Sistem</small>
+                    @php
+                    // Menentukan apakah alat aktif atau offline (batas 10 menit)
+                    $isOnline = false;
+                    if($sensor && $sensor->created_at) {
+                    $isOnline = \Carbon\Carbon::parse($sensor->created_at)->diffInMinutes(now()) <= 10;
+                        }
+                        @endphp
+
+                        @if($isOnline)
+                        <span class="badge bg-success fs-6 rounded-pill border border-light border-2">
+                        <span class="spinner-grow spinner-grow-sm me-1" style="width: 0.5rem; height: 0.5rem;" role="status"></span>
+                        ONLINE AKTIF
+                        </span>
+                        @else
+                        <span class="badge bg-danger fs-6 rounded-pill border border-light border-2">
+                            <i class="bi bi-x-circle-fill me-1"></i>
+                            OFFLINE
+                        </span>
+                        @endif
+                </div>
+
+                <div class="text-end">
+                    <small class="text-white-50 d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Mode Operasi</small>
+                    <span class="badge bg-{{ ($device->mode_sistem ?? 'AUTO') === 'AUTO' ? 'primary' : 'danger' }} fs-6 rounded-pill border border-light border-2">
+                        <i class="bi bi-gear-fill me-1"></i> {{ $device->mode_sistem ?? 'AUTO' }}
+                    </span>
+                </div>
+
+                <div class="text-end">
+                    <small class="text-white-50 d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Pembaruan Terakhir</small>
+                    <span class="fw-bold fs-6">
+                        <i class="bi bi-clock-history"></i>
+                        {{ $sensor ? \Carbon\Carbon::parse($sensor->created_at)->diffForHumans() : 'Belum ada data' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row mb-4">
     <div class="col-12">
         <div class="card border-0 shadow-sm border-start border-success border-4 bg-light">
@@ -47,39 +102,38 @@
     </div>
 </div>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="text-secondary mb-0">📊 Pemantauan Lingkungan Aktual</h4>
-    <a href="{{ route('export.excel') }}" class="btn btn-success fw-bold shadow-sm">
-        <i class="bi bi-file-earmark-excel"></i> Export ke Excel
-    </a>
-</div>
+<h4 class="text-secondary mb-3 mt-4">📊 Pemantauan Lingkungan Aktual</h4>
+
 <div class="row mb-3">
     <div class="col-md-4 col-sm-12 mb-3">
-        <div class="card border-0 shadow-sm bg-primary text-white h-100">
-            <div class="card-body">
-                <h6 class="card-title text-uppercase">Suhu Udara</h6>
-                <h2 class="display-5 fw-bold">{{ $sensor?->suhu_udara ?? '0' }}<span class="fs-4">°C</span></h2>
-                <small>Status Fuzzy: {{ $sensor?->fuzzyLog?->himpunan_suhu ?? 'Tidak Ada Data' }}</small>
+        <div class="card border-0 shadow-sm bg-primary text-white h-100 position-relative overflow-hidden">
+            <i class="bi bi-thermometer-half position-absolute opacity-25" style="font-size: 6rem; right: -10px; bottom: -20px;"></i>
+            <div class="card-body position-relative z-1">
+                <h6 class="card-title text-uppercase fw-bold">🌡️ Suhu Udara</h6>
+                <h2 class="display-5 fw-bold mb-0">{{ $sensor?->suhu_udara ?? '0' }}<span class="fs-4">°C</span></h2>
+                <small class="bg-white bg-opacity-25 px-2 py-1 rounded mt-2 d-inline-block">Status Fuzzy: <strong>{{ $sensor?->fuzzyLog?->himpunan_suhu ?? '-' }}</strong></small>
             </div>
         </div>
     </div>
 
     <div class="col-md-4 col-sm-12 mb-3">
-        <div class="card border-0 shadow-sm bg-info text-white h-100">
-            <div class="card-body">
-                <h6 class="card-title text-uppercase">Kelembapan Udara</h6>
-                <h2 class="display-5 fw-bold">{{ $sensor?->kelembapan ?? '0' }}<span class="fs-4">%</span></h2>
-                <small>Status Fuzzy: {{ $sensor?->fuzzyLog?->himpunan_kelembapan ?? 'Tidak Ada Data' }}</small>
+        <div class="card border-0 shadow-sm bg-info text-white h-100 position-relative overflow-hidden">
+            <i class="bi bi-cloud-haze2 position-absolute opacity-25" style="font-size: 6rem; right: -10px; bottom: -20px;"></i>
+            <div class="card-body position-relative z-1">
+                <h6 class="card-title text-uppercase fw-bold">💧 Kelembapan Udara</h6>
+                <h2 class="display-5 fw-bold mb-0">{{ $sensor?->kelembapan ?? '0' }}<span class="fs-4">%</span></h2>
+                <small class="bg-white bg-opacity-25 px-2 py-1 rounded mt-2 d-inline-block">Status Fuzzy: <strong>{{ $sensor?->fuzzyLog?->himpunan_kelembapan ?? '-' }}</strong></small>
             </div>
         </div>
     </div>
 
     <div class="col-md-4 col-sm-12 mb-3">
-        <div class="card border-0 shadow-sm bg-success text-white h-100">
-            <div class="card-body">
-                <h6 class="card-title text-uppercase">Tingkat pH Air</h6>
-                <h2 class="display-5 fw-bold">{{ $sensor?->ph_air ?? '0' }}</h2>
-                <small>Status Fuzzy: {{ $sensor?->fuzzyLog?->himpunan_ph ?? 'Tidak Ada Data' }}</small>
+        <div class="card border-0 shadow-sm bg-success text-white h-100 position-relative overflow-hidden">
+            <i class="bi bi-funnel-fill position-absolute opacity-25" style="font-size: 6rem; right: -10px; bottom: -20px;"></i>
+            <div class="card-body position-relative z-1">
+                <h6 class="card-title text-uppercase fw-bold">🧪 Tingkat pH Air</h6>
+                <h2 class="display-5 fw-bold mb-0">{{ $sensor?->ph_air ?? '0' }}</h2>
+                <small class="bg-white bg-opacity-25 px-2 py-1 rounded mt-2 d-inline-block">Status Fuzzy: <strong>{{ $sensor?->fuzzyLog?->himpunan_ph ?? '-' }}</strong></small>
             </div>
         </div>
     </div>
@@ -87,21 +141,23 @@
 
 <div class="row mb-5">
     <div class="col-md-6 col-sm-12 mb-3">
-        <div class="card border-0 shadow-sm bg-warning text-dark h-100">
-            <div class="card-body">
-                <h6 class="card-title text-uppercase">Konsentrasi Nutrisi (TDS)</h6>
-                <h2 class="display-5 fw-bold">{{ $sensor?->tds ?? '0' }}<span class="fs-4"> ppm</span></h2>
-                <small class="text-muted">Hanya Dimonitor (Tidak Dikendalikan)</small>
+        <div class="card border-0 shadow-sm bg-warning text-dark h-100 position-relative overflow-hidden">
+            <i class="bi bi-activity position-absolute opacity-25" style="font-size: 6rem; right: -10px; bottom: -20px;"></i>
+            <div class="card-body position-relative z-1">
+                <h6 class="card-title text-uppercase fw-bold">🌿 Konsentrasi Nutrisi (TDS)</h6>
+                <h2 class="display-5 fw-bold mb-0">{{ $sensor?->tds ?? '0' }}<span class="fs-4"> ppm</span></h2>
+                <small class="bg-dark bg-opacity-10 px-2 py-1 rounded mt-2 d-inline-block text-dark">Hanya Dimonitor (Tidak Dikendalikan)</small>
             </div>
         </div>
     </div>
 
     <div class="col-md-6 col-sm-12 mb-3">
-        <div class="card border-0 shadow-sm bg-secondary text-white h-100">
-            <div class="card-body">
-                <h6 class="card-title text-uppercase">Intensitas Cahaya</h6>
-                <h2 class="display-5 fw-bold">{{ $sensor?->intensitas_cahaya ?? '0' }}<span class="fs-4"> lux</span></h2>
-                <small>Status Cahaya: {{ $sensor?->fuzzyLog?->himpunan_cahaya ?? 'Tidak Ada Data' }}</small>
+        <div class="card border-0 shadow-sm bg-secondary text-white h-100 position-relative overflow-hidden">
+            <i class="bi bi-brightness-high-fill position-absolute opacity-25" style="font-size: 6rem; right: -10px; bottom: -20px;"></i>
+            <div class="card-body position-relative z-1">
+                <h6 class="card-title text-uppercase fw-bold">☀️ Intensitas Cahaya</h6>
+                <h2 class="display-5 fw-bold mb-0">{{ $sensor?->intensitas_cahaya ?? '0' }}<span class="fs-4"> lux</span></h2>
+                <small class="bg-white bg-opacity-25 px-2 py-1 rounded mt-2 d-inline-block">Status Fuzzy: <strong>{{ $sensor?->fuzzyLog?->himpunan_cahaya ?? '-' }}</strong></small>
             </div>
         </div>
     </div>
@@ -177,7 +233,7 @@
         }
 
         let payload = {
-            device_id: "ALAT_HIDROPONIK_01", // PERBAIKAN: Dari HODROPONIK jadi HIDROPONIK
+            device_id: "ALAT_HIDROPONIK_01",
             nama_aktuator: namaAktuator,
             status_aksi: aksi,
             mode_sistem: "MANUAL",
@@ -202,7 +258,7 @@
                 }
             })
             .catch(error => {
-                console.error('Error:', error); // PERBAIKAN: Sintaks penulisan console log yang keliru
+                console.error('Error:', error);
                 alert('⚠️ Terjadi kesalahan saat menghubungi server.');
             });
     }

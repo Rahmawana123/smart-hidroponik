@@ -17,6 +17,7 @@ class SensorLogExport implements FromCollection, WithHeadings, WithMapping, Shou
     {
         return SensorReading::with('fuzzyLog')
             ->orderBy('created_at', 'desc')
+            ->take(500) //data yang di ambil 500 data terbaru saja
             ->get();
     }
 
