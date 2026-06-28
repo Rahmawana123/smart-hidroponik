@@ -20,24 +20,23 @@
                 <div class="text-end">
                     <small class="text-white-50 d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Status Sistem</small>
                     @php
-                    // Menentukan apakah alat aktif atau offline (batas 10 menit)
-                    $isOnline = false;
-                    if($sensor && $sensor->created_at) {
-                    $isOnline = \Carbon\Carbon::parse($sensor->created_at)->diffInMinutes(now()) <= 10;
+                        // Menentukan apakah alat aktif atau offline (batas 10 menit)
+                        $isOnline = false;
+                        if($sensor && $sensor->created_at) {
+                            $isOnline = \Carbon\Carbon::parse($sensor->created_at)->diffInMinutes(now()) <= 10;
                         }
-                        @endphp
+                    @endphp
 
-                        @if($isOnline)
-                        <span class="badge bg-success fs-6 rounded-pill border border-light border-2">
+                    @if($isOnline)
+                    <span class="badge bg-success fs-6 rounded-pill border border-light border-2">
                         <span class="spinner-grow spinner-grow-sm me-1" style="width: 0.5rem; height: 0.5rem;" role="status"></span>
                         ONLINE AKTIF
-                        </span>
-                        @else
-                        <span class="badge bg-danger fs-6 rounded-pill border border-light border-2">
-                            <i class="bi bi-x-circle-fill me-1"></i>
-                            OFFLINE
-                        </span>
-                        @endif
+                    </span>
+                    @else
+                    <span class="badge bg-danger fs-6 rounded-pill border border-light border-2">
+                        <i class="bi bi-x-circle-fill me-1"></i> OFFLINE
+                    </span>
+                    @endif
                 </div>
 
                 <div class="text-end">
@@ -164,24 +163,35 @@
 </div>
 
 <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
-    <h4 class="text-secondary mb-0">🎛️ Panel Kendali Pengawas (Override)</h4>
-    <div id="mode-badge-container">
-        @if(($device->mode_sistem ?? 'AUTO') === 'MANUAL')
-        <span class="badge bg-danger p-2 fs-6 shadow-sm" id="status-mode">MODE SISTEM: MANUAL</span>
-        @else
-        <span class="badge bg-success p-2 fs-6 shadow-sm" id="status-mode">MODE SISTEM: AUTO</span>
-        @endif
+    <div>
+        <h4 class="text-secondary mb-1">🎛️ Panel Kendali Pengawas</h4>
+        <small class="text-muted">Aktuator hanya dapat dikontrol saat sistem berada di Mode MANUAL.</small>
+    </div>
+    
+    <div class="d-flex align-items-center gap-2 bg-light p-2 rounded shadow-sm border border-2 {{ ($device->mode_sistem ?? 'AUTO') === 'MANUAL' ? 'border-danger' : 'border-primary' }}">
+        <span class="fw-bold text-secondary me-2 small text-uppercase">Mode Sistem:</span>
+        <button class="btn {{ ($device->mode_sistem ?? 'AUTO') === 'AUTO' ? 'btn-primary' : 'btn-outline-primary' }} btn-sm fw-bold px-3" onclick="ubahMode('AUTO')">
+            <i class="bi bi-robot"></i> AUTO
+        </button>
+        <button class="btn {{ ($device->mode_sistem ?? 'AUTO') === 'MANUAL' ? 'btn-danger' : 'btn-outline-danger' }} btn-sm fw-bold px-3" onclick="ubahMode('MANUAL')">
+            <i class="bi bi-person-fill-gear"></i> MANUAL
+        </button>
     </div>
 </div>
 
 <div class="row mb-5">
+    @php
+        // Cek apakah sistem sedang di mode AUTO. Jika ya, kunci tombolnya.
+        $isLocked = ($device->mode_sistem ?? 'AUTO') === 'AUTO' ? 'disabled' : '';
+    @endphp
+
     <div class="col-md-3 mb-3">
         <div class="card border-0 shadow-sm h-100 border-start border-warning border-4">
             <div class="card-body text-center">
                 <h5 class="card-title mb-4">Misting</h5>
                 <div class="d-grid gap-2">
-                    <button id="btn-misting-ON" class="btn {{ ($device->misting ?? 'OFF') === 'ON' ? 'btn-success' : 'btn-outline-success' }} fw-bold" onclick="kirimPerintah('misting', 'ON')">NYALAKAN (ON)</button>
-                    <button id="btn-misting-OFF" class="btn {{ ($device->misting ?? 'OFF') === 'OFF' ? 'btn-danger' : 'btn-outline-danger' }} fw-bold" onclick="kirimPerintah('misting', 'OFF')">MATIKAN (OFF)</button>
+                    <button class="btn {{ ($device->misting ?? 'OFF') === 'ON' ? 'btn-success' : 'btn-outline-success' }} fw-bold" onclick="kirimPerintah('misting', 'ON')" {{ $isLocked }}>NYALAKAN (ON)</button>
+                    <button class="btn {{ ($device->misting ?? 'OFF') === 'OFF' ? 'btn-danger' : 'btn-outline-danger' }} fw-bold" onclick="kirimPerintah('misting', 'OFF')" {{ $isLocked }}>MATIKAN (OFF)</button>
                 </div>
             </div>
         </div>
@@ -192,8 +202,8 @@
             <div class="card-body text-center">
                 <h5 class="card-title mb-4">Pompa pH Up</h5>
                 <div class="d-grid gap-2">
-                    <button id="btn-pompa_ph_up-ON" class="btn {{ ($device->pompa_ph_up ?? 'OFF') === 'ON' ? 'btn-success' : 'btn-outline-success' }} fw-bold" onclick="kirimPerintah('pompa_ph_up', 'ON')">NYALAKAN (ON)</button>
-                    <button id="btn-pompa_ph_up-OFF" class="btn {{ ($device->pompa_ph_up ?? 'OFF') === 'OFF' ? 'btn-danger' : 'btn-outline-danger' }} fw-bold" onclick="kirimPerintah('pompa_ph_up', 'OFF')">MATIKAN (OFF)</button>
+                    <button class="btn {{ ($device->pompa_ph_up ?? 'OFF') === 'ON' ? 'btn-success' : 'btn-outline-success' }} fw-bold" onclick="kirimPerintah('pompa_ph_up', 'ON')" {{ $isLocked }}>NYALAKAN (ON)</button>
+                    <button class="btn {{ ($device->pompa_ph_up ?? 'OFF') === 'OFF' ? 'btn-danger' : 'btn-outline-danger' }} fw-bold" onclick="kirimPerintah('pompa_ph_up', 'OFF')" {{ $isLocked }}>MATIKAN (OFF)</button>
                 </div>
             </div>
         </div>
@@ -204,8 +214,8 @@
             <div class="card-body text-center">
                 <h5 class="card-title mb-4">Pompa pH Down</h5>
                 <div class="d-grid gap-2">
-                    <button id="btn-pompa_ph_down-ON" class="btn {{ ($device->pompa_ph_down ?? 'OFF') === 'ON' ? 'btn-success' : 'btn-outline-success' }} fw-bold" onclick="kirimPerintah('pompa_ph_down', 'ON')">NYALAKAN (ON)</button>
-                    <button id="btn-pompa_ph_down-OFF" class="btn {{ ($device->pompa_ph_down ?? 'OFF') === 'OFF' ? 'btn-danger' : 'btn-outline-danger' }} fw-bold" onclick="kirimPerintah('pompa_ph_down', 'OFF')">MATIKAN (OFF)</button>
+                    <button class="btn {{ ($device->pompa_ph_down ?? 'OFF') === 'ON' ? 'btn-success' : 'btn-outline-success' }} fw-bold" onclick="kirimPerintah('pompa_ph_down', 'ON')" {{ $isLocked }}>NYALAKAN (ON)</button>
+                    <button class="btn {{ ($device->pompa_ph_down ?? 'OFF') === 'OFF' ? 'btn-danger' : 'btn-outline-danger' }} fw-bold" onclick="kirimPerintah('pompa_ph_down', 'OFF')" {{ $isLocked }}>MATIKAN (OFF)</button>
                 </div>
             </div>
         </div>
@@ -216,8 +226,8 @@
             <div class="card-body text-center">
                 <h5 class="card-title mb-4">Lampu Growlight</h5>
                 <div class="d-grid gap-2">
-                    <button id="btn-growlight-ON" class="btn {{ ($device->growlight ?? 'OFF') === 'ON' ? 'btn-success' : 'btn-outline-success' }} fw-bold" onclick="kirimPerintah('growlight', 'ON')">NYALAKAN (ON)</button>
-                    <button id="btn-growlight-OFF" class="btn {{ ($device->growlight ?? 'OFF') === 'OFF' ? 'btn-danger' : 'btn-outline-danger' }} fw-bold" onclick="kirimPerintah('growlight', 'OFF')">MATIKAN (OFF)</button>
+                    <button class="btn {{ ($device->growlight ?? 'OFF') === 'ON' ? 'btn-success' : 'btn-outline-success' }} fw-bold" onclick="kirimPerintah('growlight', 'ON')" {{ $isLocked }}>NYALAKAN (ON)</button>
+                    <button class="btn {{ ($device->growlight ?? 'OFF') === 'OFF' ? 'btn-danger' : 'btn-outline-danger' }} fw-bold" onclick="kirimPerintah('growlight', 'OFF')" {{ $isLocked }}>MATIKAN (OFF)</button>
                 </div>
             </div>
         </div>
@@ -225,18 +235,49 @@
 </div>
 
 <script>
+    // Fungsi Baru: Khusus untuk Mengubah Mode (AUTO/MANUAL)
+    function ubahMode(modeBaru) {
+        let yakin = confirm(`Peringatan: Anda akan mengubah mode sistem ke ${modeBaru}. Lanjutkan?`);
+
+        if (!yakin) return;
+
+        fetch('/api/kontrol/mode', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                device_id: "ALAT_HIDROPONIK_01",
+                mode_sistem: modeBaru
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('✅ ' + data.message);
+                location.reload();
+            } else {
+                alert('❌ GAGAL: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('⚠️ Terjadi kesalahan saat menghubungi server.');
+        });
+    }
+
+    // Fungsi Lama: Mengirim perintah ON/OFF Aktuator
     function kirimPerintah(namaAktuator, aksi) {
-        let yakin = confirm(`Apakah Anda yakin ingin mengubah ${namaAktuator} menjadi ${aksi}? Sistem akan beralih ke Mode MANUAL.`);
+        let yakin = confirm(`Apakah Anda yakin ingin memaksakan ${namaAktuator} menjadi ${aksi}?`);
 
-        if (!yakin) {
-            return;
-        }
+        if (!yakin) return;
 
+        // PERBAIKAN: Payload tidak lagi mengirimkan mode_sistem
         let payload = {
-            device_id: "ALAT_HIDROPONIK_01",
+            device_id: "ALAT_HIDROPONIK_01", 
             nama_aktuator: namaAktuator,
             status_aksi: aksi,
-            mode_sistem: "MANUAL",
             trigger_source: "USER_WEB"
         };
 
@@ -258,7 +299,7 @@
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error:', error); 
                 alert('⚠️ Terjadi kesalahan saat menghubungi server.');
             });
     }

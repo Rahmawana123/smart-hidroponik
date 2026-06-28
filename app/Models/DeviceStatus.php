@@ -16,13 +16,7 @@ class DeviceStatus extends Model
         'pompa_ph_down',
         'misting',
         'growlight',
-        'override_until',
         'crop_config_id'
-    ];
-
-    // Penting untuk kolom waktu (override_until) agar dikenali sebagai objek Carbon/Waktu
-    protected $casts = [
-        'override_until' => 'datetime',
     ];
 
     public function cropConfig()

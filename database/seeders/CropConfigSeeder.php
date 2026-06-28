@@ -10,35 +10,39 @@ class CropConfigSeeder extends Seeder
 {
     public function run(): void
     {
-        // Resep 1: Selada (Bisa Anda ganti angkanya kapan saja nanti)
-        CropConfig::create([
-            'nama_tanaman' => 'Selada',
-            'batas_bawah_ph' => 6.0,
-            'batas_atas_ph' => 7.0,
-            'batas_bawah_suhu' => 15.0,
-            'batas_atas_suhu' => 25.0,
-            'batas_bawah_kelembapan' => 60.0,
-            'batas_atas_kelembapan' => 80.0,
-            'batas_bawah_cahaya' => 150,
-            'batas_atas_cahaya' => 800,
-            'batas_bawah_tds' => 560,
-            'batas_atas_tds' => 840
-        ]);
+        // Resep 1: Selada 
+        CropConfig::updateOrCreate(
+            ['nama_tanaman' => 'Sawi Pakcoy (Brassica rapa L.)'],
+            [
+                'batas_bawah_suhu'       => 22.0,
+                'batas_atas_suhu'        => 33.0,
+                'batas_bawah_ph'         => 6.0,
+                'batas_atas_ph'          => 7.0,
+                'batas_bawah_kelembapan' => 60.0,
+                'batas_atas_kelembapan'  => 80.0,
+                'batas_bawah_cahaya'     => 5400.0,
+                'batas_atas_cahaya'      => 10000.0,
+                'batas_bawah_tds'        => 900.0,
+                'batas_atas_tds'         => 1400.0,
+            ]
+        );
 
-        // Resep 2: Pakcoy
-        CropConfig::create([
-            'nama_tanaman' => 'Pakcoy',
-            'batas_bawah_ph' => 6.5,
-            'batas_atas_ph' => 7.0,
-            'batas_bawah_suhu' => 20.0,
-            'batas_atas_suhu' => 30.0,
-            'batas_bawah_kelembapan' => 60.0,
-            'batas_atas_kelembapan' => 75.0,
-            'batas_bawah_cahaya' => 200,
-            'batas_atas_cahaya' => 1000,
-            'batas_bawah_tds' => 1050,
-            'batas_atas_tds' => 1400
-        ]);
+        // 2. Inisialisasi Data Opsi Tanaman Tambahan (Selada)
+        CropConfig::updateOrCreate(
+            ['nama_tanaman' => 'Selada (Lactuca sativa)'],
+            [
+                'batas_bawah_suhu'       => 25.0,
+                'batas_atas_suhu'        => 28.0,
+                'batas_bawah_ph'         => 6.0,
+                'batas_atas_ph'          => 6.8,
+                'batas_bawah_kelembapan' => 65.0,
+                'batas_atas_kelembapan'  => 80.0,
+                'batas_bawah_cahaya'     => 4850.0,
+                'batas_atas_cahaya'      => 7890.0,
+                'batas_bawah_tds'        => 700.0,
+                'batas_atas_tds'         => 1000.0,
+            ]
+        );
 
         // Anda bisa menambahkan Resep 3 (Kangkung), Resep 4 (Bayam), dst di sini nanti
 
