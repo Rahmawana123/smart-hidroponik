@@ -23,6 +23,7 @@ class SensorController extends Controller
 
             'data_fuzzy.himpunan_ph' => 'required|string',
             'data_fuzzy.himpunan_suhu' => 'required|string',
+            'data_fuzzy.himpunan_kelembapan' => 'required|string',
             'data_fuzzy.himpunan_cahaya' => 'required|string',
             'data_fuzzy.nilai_defuzz_pompa_ph' => 'required|numeric',
             'data_fuzzy.nilai_defuzz_misting' => 'required|numeric',

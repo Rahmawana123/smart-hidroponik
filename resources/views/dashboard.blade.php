@@ -90,12 +90,13 @@
                 </div>
 
                 <hr>
-                <div class="row text-center text-muted small">
-                    <div class="col-3">Suhu: <strong>{{ $device->cropConfig->batas_bawah_suhu ?? '-' }} - {{ $device->cropConfig->batas_atas_suhu ?? '-' }}°C</strong></div>
-                    <div class="col-3">pH: <strong>{{ $device->cropConfig->batas_bawah_ph ?? '-' }} - {{ $device->cropConfig->batas_atas_ph ?? '-' }}</strong></div>
-                    <div class="col-3">RH: <strong>{{ $device->cropConfig->batas_bawah_kelembapan ?? '-' }} - {{ $device->cropConfig->batas_atas_kelembapan ?? '-' }}%</strong></div>
-                    <div class="col-3">TDS: <strong>{{ $device->cropConfig->batas_bawah_tds ?? '-' }} - {{ $device->cropConfig->batas_atas_tds ?? '-' }} ppm</strong></div>
-                </div>
+<div class="row text-center text-muted small">
+    <div class="col">Suhu: <strong>{{ $device->cropConfig->batas_bawah_suhu ?? '-' }} - {{ $device->cropConfig->batas_atas_suhu ?? '-' }}°C</strong></div>
+    <div class="col">pH: <strong>{{ $device->cropConfig->batas_bawah_ph ?? '-' }} - {{ $device->cropConfig->batas_atas_ph ?? '-' }}</strong></div>
+    <div class="col">RH: <strong>{{ $device->cropConfig->batas_bawah_kelembapan ?? '-' }} - {{ $device->cropConfig->batas_atas_kelembapan ?? '-' }}%</strong></div>
+    <div class="col">TDS: <strong>{{ $device->cropConfig->batas_bawah_tds ?? '-' }} - {{ $device->cropConfig->batas_atas_tds ?? '-' }} ppm</strong></div>
+    <div class="col">Cahaya: <strong>{{ $device->cropConfig->batas_bawah_cahaya ?? '-' }} - {{ $device->cropConfig->batas_atas_cahaya ?? '-' }} lux</strong></div>
+</div>
             </div>
         </div>
     </div>
