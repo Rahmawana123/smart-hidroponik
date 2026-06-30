@@ -60,11 +60,14 @@ class SensorController extends Controller
             $tds = $request->input('data_sensor.tds');
             $cahaya = $request->input('data_sensor.intensitas_cahaya');
 
+            // 1. Tambahkan pengambilan variabel himpunan_kelembapan
             $statusSuhu = $request->input('data_fuzzy.himpunan_suhu');
             $statusPh = $request->input('data_fuzzy.himpunan_ph');
             $statusCahaya = $request->input('data_fuzzy.himpunan_cahaya');
+            $statusKelembapan = $request->input('data_fuzzy.himpunan_kelembapan');
 
-            if ($statusSuhu !== 'NORMAL' || $statusPh !== 'NORMAL') {
+            // 2. Tambahkan kelembapan ke dalam syarat pemicu alarm (opsional, tapi disarankan)
+            if ($statusSuhu !== 'NORMAL' || $statusPh !== 'NORMAL' || $statusKelembapan !== 'NORMAL') {
                 $pesanTelegram  = "🚨 *PERINGATAN DINI HIDROPONIK* 🚨\n\n";
 
                 $pesanTelegram .= "Sistem mendeteksi parameter lingkungan berada di luar kondisi normal.\n\n";
@@ -73,12 +76,13 @@ class SensorController extends Controller
                 $pesanTelegram .= "🌡️ Suhu Udara : {$suhu} °C\n";
                 $pesanTelegram .= "☁️ Kelembapan : {$kelembapan} %\n";
                 $pesanTelegram .= "💧 pH Air : {$phAir}\n";
-                $pesanTelegram .= "🧪 TDS Nutrisi : {$tds} ppm\n\n";
+                $pesanTelegram .= "🧪 TDS Nutrisi : {$tds} ppm\n";
                 $pesanTelegram .= "💡 Intensitas Cahaya : {$cahaya} lux\n\n";
 
                 $pesanTelegram .= "📌 *Status Hasil Fuzzy*\n";
                 $pesanTelegram .= "• Suhu : {$statusSuhu}\n";
-                $pesanTelegram .= "• pH Air : {$statusPh}\n\n";
+                $pesanTelegram .= "• Kelembapan : {$statusKelembapan}\n"; // <-- 3. Tambahkan baris ini ke teks pesan
+                $pesanTelegram .= "• pH Air : {$statusPh}\n";
                 $pesanTelegram .= "• Cahaya : {$statusCahaya}\n\n";
 
                 $pesanTelegram .= "🕒 Waktu : " . now()->format('d-m-Y H:i:s') . " WIB\n\n";
